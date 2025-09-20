@@ -153,3 +153,26 @@ body {
 
 /* Hover helpers */
 .hover-bg-muted:hover { background-color: var(--color-muted); }
+
+/* Theme alias overrides: map common Tailwind color utilities to tokens for dark/light */
+.bg-white { background-color: var(--color-surface) !important; }
+.bg-gray-50 { background-color: var(--color-background) !important; }
+.text-gray-800 { color: var(--color-foreground) !important; }
+.text-gray-600, .text-gray-500 { color: var(--color-muted-foreground) !important; }
+.bg-yellow-50 { background-color: var(--color-warning-weak) !important; }
+.text-yellow-800, .text-yellow-400 { color: var(--color-warning) !important; }
+.border-yellow-400 { border-color: var(--color-warning) !important; }
+.text-pink-700 { color: var(--color-primary) !important; }
+.bg-pink-700, .hover\:bg-pink-800:hover { background-color: var(--color-primary) !important; }
+.text-blue-500, .text-blue-600, .text-blue-800 { color: var(--color-accent) !important; }
+.text-indigo-500, .text-purple-500 { color: var(--color-accent) !important; }
+.bg-blue-50, .bg-blue-200 { background-color: var(--color-accent-weak) !important; }
+.bg-blue-500, .bg-blue-600, .bg-blue-700 { background-color: var(--color-accent) !important; }
+.bg-green-50 { background-color: var(--color-success-weak) !important; }
+.text-green-800, .text-green-600, .text-green-500 { color: var(--color-success) !important; }
+.bg-green-500, .bg-green-600, .bg-green-700 { background-color: var(--color-success) !important; }
+.bg-red-500 { background-color: var(--color-danger) !important; }
+.text-red-600 { color: var(--color-danger) !important; }
+.bg-gray-200 { background-color: var(--color-muted) !important; }
+.bg-purple-500 { background-color: var(--color-accent) !important; }
+.bg-gray-600, .hover\:bg-gray-700:hover { background-color: var(--color-muted-foreground) !important; }

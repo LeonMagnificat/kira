@@ -13,7 +13,7 @@ function adminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Desktop Sidebar */}
       <aside className="fixed left-0 top-0 h-full flex-shrink-0 hidden md:block z-10">
         <NavItems 
