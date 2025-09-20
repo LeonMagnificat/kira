@@ -18,25 +18,25 @@ export const formatDate = (dateString: string): string => {
 export const getStatusColor = (status: string): string => {
   switch (status.toLowerCase()) {
     case 'paid':
-      return 'bg-green-100 text-green-800';
+      return 'bg-success-weak text-success';
     case 'partial':
-      return 'bg-yellow-100 text-yellow-800';
+      return 'bg-warning-weak text-warning';
     case 'sent':
-      return 'bg-blue-100 text-blue-800';
+      return 'bg-accent-weak text-accent';
     case 'overdue':
-      return 'bg-red-100 text-red-800';
+      return 'bg-danger-weak text-danger';
     case 'draft':
-      return 'bg-gray-100 text-gray-800';
+      return 'bg-surface text-muted-foreground';
     case 'cancelled':
-      return 'bg-red-100 text-red-800';
+      return 'bg-danger-weak text-danger';
     case 'approved':
-      return 'bg-green-100 text-green-800';
+      return 'bg-success-weak text-success';
     case 'denied':
-      return 'bg-red-100 text-red-800';
+      return 'bg-danger-weak text-danger';
     case 'pending':
-      return 'bg-yellow-100 text-yellow-800';
+      return 'bg-warning-weak text-warning';
     default:
-      return 'bg-gray-100 text-gray-800';
+      return 'bg-surface text-muted-foreground';
   }
 };
 

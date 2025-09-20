@@ -103,7 +103,7 @@ function PatientsAdmin() {
         <Header title={sidebarItems[6].label} />
         </main>
 
-        <div className={`flex flex-col mt-4 transition-all duration-500 ease-in-out ${
+    <div className={`flex flex-col mt-4 transition-all duration-500 ease-in-out ${
         isMinimized ? 'sm:ml-[0px] md:ml-[-70px]' : 'sm:ml-0 md:ml-[-25px]'
       }`}>
 

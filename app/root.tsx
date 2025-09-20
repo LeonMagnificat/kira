@@ -9,6 +9,7 @@ import {
 
 import type { Route } from "./+types/root";
 import "./app.css";
+import { applyTheme, getInitialMode, THEME_STORAGE_KEY, type ThemeMode } from "./design/theme";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -24,6 +25,18 @@ export const links: Route.LinksFunction = () => [
 ];
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  // Apply initial theme mode before hydration
+  const script = `(() => {
+    try {
+      const key = '${THEME_STORAGE_KEY}';
+      const stored = localStorage.getItem(key);
+      let mode = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      const root = document.documentElement;
+      if (mode === 'dark') root.classList.add('dark');
+      else root.classList.remove('dark');
+    } catch {}
+  })()`;
+
   return (
     <html lang="en">
       <head>
@@ -35,6 +48,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         {children}
         <ScrollRestoration />
+        <script dangerouslySetInnerHTML={{ __html: script }} />
         <Scripts />
       </body>
     </html>

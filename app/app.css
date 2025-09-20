@@ -1,4 +1,16 @@
 @import "tailwindcss";
+@import "./design/theme.css"; /* central tokens */
+
+/* Base layer using tokens for bg/text */
+:root {
+  --app-bg: var(--color-background);
+  --app-fg: var(--color-foreground);
+}
+
+body {
+  background-color: var(--app-bg);
+  color: var(--app-fg);
+}
 
 /* Custom animations */
 @keyframes slideIn {
@@ -117,3 +129,27 @@
 .animate-fadeInUp {
   animation: fadeInUp 0.3s ease-out forwards;
 }
+
+/* Token utility classes (for replacing hard-coded color classes) */
+.bg-surface { background-color: var(--color-surface); }
+.bg-background { background-color: var(--color-background); }
+.text-foreground { color: var(--color-foreground); }
+.text-muted-foreground { color: var(--color-muted-foreground); }
+.border-token { border-color: var(--color-border); }
+.text-primary { color: var(--color-primary); }
+.bg-primary { background-color: var(--color-primary); }
+.text-primary-foreground { color: var(--color-primary-foreground); }
+.text-accent { color: var(--color-accent); }
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-danger { color: var(--color-danger); }
+
+/* Weak backgrounds for badges/chips */
+.bg-primary-weak { background-color: var(--color-primary-weak); }
+.bg-accent-weak { background-color: var(--color-accent-weak); }
+.bg-success-weak { background-color: var(--color-success-weak); }
+.bg-warning-weak { background-color: var(--color-warning-weak); }
+.bg-danger-weak { background-color: var(--color-danger-weak); }
+
+/* Hover helpers */
+.hover-bg-muted:hover { background-color: var(--color-muted); }

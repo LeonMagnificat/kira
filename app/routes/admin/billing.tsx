@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Header, InvoiceDetailModal, CreateInvoiceModal } from '~/components';
+import { Header, InvoiceDetailModal, CreateInvoiceModal, Card, Input, Select, Tabs } from '~/components';
 import { useOutletContext } from 'react-router-dom';
 import { sidebarItems } from '~/constants';
 import {
@@ -117,8 +117,8 @@ function Billing() {
       }`}>
         
         {/* Navigation Tabs */}
-        <div className="bg-white shadow-sm rounded-2xl mb-6">
-          <div className="flex border-b border-gray-200">
+        <div className="shadow-sm rounded-2xl mb-6" style={{ background: 'var(--color-surface)' }}>
+          <div className="flex" style={{ borderBottom: '1px solid var(--color-border)' }}>
             {[
               { key: 'overview', label: 'Overview', icon: '📊' },
               { key: 'invoices', label: 'Invoices', icon: '📄' },
@@ -128,11 +128,12 @@ function Billing() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as any)}
-                className={`flex items-center px-6 py-4 font-medium transition-colors ${
-                  activeTab === tab.key
-                    ? 'text-pink-700 border-b-2 border-pink-700 bg-pink-50'
-                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                }`}
+                className="flex items-center px-6 py-4 font-medium transition-colors"
+                style={{
+                  color: activeTab === tab.key ? 'var(--color-primary)' : 'var(--color-muted-foreground)',
+                  borderBottom: activeTab === tab.key ? '2px solid var(--color-primary)' : '2px solid transparent',
+                  background: activeTab === tab.key ? 'var(--color-primary-weak)' : 'transparent'
+                }}
               >
                 <span className="mr-2">{tab.icon}</span>
                 {tab.label}
@@ -146,151 +147,150 @@ function Billing() {
           <div className="space-y-6">
             {/* Key Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white p-6 rounded-2xl shadow-sm">
+              <Card>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalRevenue)}</p>
+                    <p className="text-sm font-medium" style={{ color: 'var(--color-muted-foreground)' }}>Total Revenue</p>
+                    <p className="text-2xl font-bold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(totalRevenue)}</p>
                   </div>
-                  <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--color-success-weak)' }}>
                     <span className="text-2xl">💰</span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <span className="text-sm text-green-600">+12.5% from last month</span>
+                  <span className="text-sm" style={{ color: 'var(--color-success)' }}>+12.5% from last month</span>
                 </div>
-              </div>
+              </Card>
 
-              <div className="bg-white p-6 rounded-2xl shadow-sm">
+              <Card>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Collected</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalCollected)}</p>
+                    <p className="text-sm font-medium" style={{ color: 'var(--color-muted-foreground)' }}>Collected</p>
+                    <p className="text-2xl font-bold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(totalCollected)}</p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--color-accent-weak)' }}>
                     <span className="text-2xl">✅</span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <span className="text-sm text-blue-600">{collectionRate.toFixed(1)}% collection rate</span>
+                  <span className="text-sm" style={{ color: 'var(--color-accent)' }}>{collectionRate.toFixed(1)}% collection rate</span>
                 </div>
-              </div>
+              </Card>
 
-              <div className="bg-white p-6 rounded-2xl shadow-sm">
+              <Card>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Outstanding</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalOutstanding)}</p>
+                    <p className="text-sm font-medium" style={{ color: 'var(--color-muted-foreground)' }}>Outstanding</p>
+                    <p className="text-2xl font-bold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(totalOutstanding)}</p>
                   </div>
-                  <div className="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--color-warning-weak)' }}>
                     <span className="text-2xl">⏳</span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <span className="text-sm text-yellow-600">{statusCounts.overdue} overdue invoices</span>
+                  <span className="text-sm" style={{ color: 'var(--color-warning)' }}>{statusCounts.overdue} overdue invoices</span>
                 </div>
-              </div>
+              </Card>
 
-              <div className="bg-white p-6 rounded-2xl shadow-sm">
+              <Card>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-600">This Month</p>
-                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(monthlyRevenue)}</p>
+                    <p className="text-sm font-medium" style={{ color: 'var(--color-muted-foreground)' }}>This Month</p>
+                    <p className="text-2xl font-bold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(monthlyRevenue)}</p>
                   </div>
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: 'var(--color-accent-weak)' }}>
                     <span className="text-2xl">📈</span>
                   </div>
                 </div>
                 <div className="mt-4">
-                  <span className="text-sm text-purple-600">Monthly revenue</span>
+                  <span className="text-sm" style={{ color: 'var(--color-accent)' }}>Monthly revenue</span>
                 </div>
-              </div>
+              </Card>
             </div>
 
             {/* Charts and Recent Activity */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Top Services */}
-              <div className="bg-white p-6 rounded-2xl shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Services</h3>
+              <Card>
+                <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-foreground)' }}>Top Services</h3>
                 <div className="space-y-4">
                   {topServices.map((service, index) => (
                     <div key={service.code} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center text-sm font-bold text-pink-700">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" style={{ background: 'var(--color-primary-weak)', color: 'var(--color-primary)' }}>
                           {index + 1}
                         </div>
                         <div>
-                          <p className="font-medium text-gray-900">{service.code}</p>
-                          <p className="text-sm text-gray-500">{service.description}</p>
+                          <p className="font-medium" style={{ color: 'var(--color-foreground)' }}>{service.code}</p>
+                          <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>{service.description}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">{formatCurrency(service.revenue)}</p>
-                        <p className="text-sm text-gray-500">{service.count} services</p>
+                        <p className="font-semibold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(service.revenue)}</p>
+                        <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>{service.count} services</p>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </Card>
 
               {/* Aging Report */}
-              <div className="bg-white p-6 rounded-2xl shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Accounts Receivable Aging</h3>
+              <Card>
+                <h3 className="text-lg font-semibold mb-4" style={{ color: 'var(--color-foreground)' }}>Accounts Receivable Aging</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">Current (0-30 days)</span>
-                    <span className="font-semibold text-green-600">{formatCurrency(agingReport.current)}</span>
+                    <span style={{ color: 'var(--color-muted-foreground)' }}>Current (0-30 days)</span>
+                    <span className="font-semibold" style={{ color: 'var(--color-success)' }}>{formatCurrency(agingReport.current)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">31-60 days</span>
-                    <span className="font-semibold text-yellow-600">{formatCurrency(agingReport.thirtyDays)}</span>
+                    <span style={{ color: 'var(--color-muted-foreground)' }}>31-60 days</span>
+                    <span className="font-semibold" style={{ color: 'var(--color-warning)' }}>{formatCurrency(agingReport.thirtyDays)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">61-90 days</span>
-                    <span className="font-semibold text-orange-600">{formatCurrency(agingReport.sixtyDays)}</span>
+                    <span style={{ color: 'var(--color-muted-foreground)' }}>61-90 days</span>
+                    <span className="font-semibold" style={{ color: '#ea580c' }}>{formatCurrency(agingReport.sixtyDays)}</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-gray-600">90+ days</span>
-                    <span className="font-semibold text-red-600">{formatCurrency(agingReport.ninetyDays)}</span>
+                    <span style={{ color: 'var(--color-muted-foreground)' }}>90+ days</span>
+                    <span className="font-semibold" style={{ color: 'var(--color-danger)' }}>{formatCurrency(agingReport.ninetyDays)}</span>
                   </div>
-                  <div className="border-t pt-4">
+                  <div className="pt-4" style={{ borderTop: '1px solid var(--color-border)' }}>
                     <div className="flex justify-between items-center">
-                      <span className="font-semibold text-gray-900">Total Outstanding</span>
-                      <span className="font-bold text-gray-900">{formatCurrency(agingReport.total)}</span>
+                      <span className="font-semibold" style={{ color: 'var(--color-foreground)' }}>Total Outstanding</span>
+                      <span className="font-bold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(agingReport.total)}</span>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Card>
             </div>
           </div>
         )}
 
         {/* Invoices Tab */}
         {activeTab === 'invoices' && (
-          <div className="bg-white shadow-sm rounded-2xl">
+          <div className="shadow-sm rounded-2xl" style={{ background: 'var(--color-surface)' }}>
             {/* Filters and Search */}
-            <div className="p-6 border-b border-gray-200">
+            <div className="p-6" style={{ borderBottom: '1px solid var(--color-border)' }}>
               <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div className="flex flex-col sm:flex-row gap-4">
                   {/* Search */}
                   <div className="relative">
-                    <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5" style={{ color: 'var(--color-muted-foreground)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
-                    <input
+                    <Input
                       type="text"
                       placeholder="Search invoices..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      className="pl-10"
                     />
                   </div>
 
                   {/* Status Filter */}
-                  <select
+                  <Select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
                   >
                     <option value="all">All Status ({statusCounts.all})</option>
                     <option value="draft">Draft ({statusCounts.draft})</option>
@@ -299,12 +299,13 @@ function Billing() {
                     <option value="partial">Partial ({statusCounts.partial})</option>
                     <option value="overdue">Overdue ({statusCounts.overdue})</option>
                     <option value="cancelled">Cancelled ({statusCounts.cancelled})</option>
-                  </select>
+                  </Select>
                 </div>
 
                 <button
                   onClick={() => setShowCreateInvoice(true)}
-                  className="bg-pink-700 text-white px-4 py-2 rounded-lg hover:bg-pink-800 transition-colors flex items-center"
+                  className="px-4 py-2 rounded-lg transition-colors flex items-center"
+                  style={{ background: 'var(--color-primary)', color: 'var(--color-primary-foreground)' }}
                 >
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -376,55 +377,55 @@ function Billing() {
                     return (
                       <tr 
                         key={invoice.id} 
-                        className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                          overdue ? 'bg-red-50' : ''
-                        }`}
+                        className={`transition-colors ${overdue ? '' : ''}`}
+                        style={{ borderBottom: '1px solid var(--color-border)', background: overdue ? 'var(--color-danger-weak)' : 'transparent' }}
                       >
                         <td className="py-4 px-6">
-                          <div className="font-medium text-gray-900">{invoice.invoiceNumber}</div>
-                          <div className="text-sm text-gray-500">Service: {formatDate(invoice.dateOfService)}</div>
+                          <div className="font-medium" style={{ color: 'var(--color-foreground)' }}>{invoice.invoiceNumber}</div>
+                          <div className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>Service: {formatDate(invoice.dateOfService)}</div>
                         </td>
                         <td className="py-4 px-6">
                           {patient && (
                             <div>
-                              <div className="font-medium text-gray-900">
+                              <div className="font-medium" style={{ color: 'var(--color-foreground)' }}>
                                 {patient.firstName} {patient.lastName}
                               </div>
-                              <div className="text-sm text-gray-500">{patient.email}</div>
+                              <div className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>{patient.email}</div>
                             </div>
                           )}
                         </td>
                         <td className="py-4 px-6">
-                          <div className="text-gray-900">{formatDate(invoice.createdDate)}</div>
-                          <div className="text-sm text-gray-500">Due: {formatDate(invoice.dueDate)}</div>
+                          <div style={{ color: 'var(--color-foreground)' }}>{formatDate(invoice.createdDate)}</div>
+                          <div className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>Due: {formatDate(invoice.dueDate)}</div>
                         </td>
                         <td className="py-4 px-6">
-                          <div className="font-semibold text-gray-900">{formatCurrency(invoice.totalAmount)}</div>
-                          <div className="text-sm text-gray-500">Paid: {formatCurrency(invoice.amountPaid)}</div>
+                          <div className="font-semibold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(invoice.totalAmount)}</div>
+                          <div className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>Paid: {formatCurrency(invoice.amountPaid)}</div>
                         </td>
                         <td className="py-4 px-6">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(invoice.status)}`}>
                             {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
                           </span>
                           {overdue && (
-                            <div className="text-xs text-red-600 mt-1">Overdue</div>
+                            <div className="text-xs mt-1" style={{ color: 'var(--color-danger)' }}>Overdue</div>
                           )}
                         </td>
                         <td className="py-4 px-6">
-                          <div className="font-semibold text-gray-900">{formatCurrency(invoice.balanceDue)}</div>
+                          <div className="font-semibold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(invoice.balanceDue)}</div>
                         </td>
                         <td className="py-4 px-6">
                           <div className="flex space-x-2">
                             <button
                               onClick={() => setSelectedInvoice(invoice)}
-                              className="text-pink-600 hover:text-pink-800 text-sm font-medium"
+                              className="text-sm font-medium"
+                              style={{ color: 'var(--color-primary)' }}
                             >
                               View
                             </button>
-                            <button className="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            <button className="text-sm font-medium" style={{ color: 'var(--color-accent)' }}>
                               Edit
                             </button>
-                            <button className="text-green-600 hover:text-green-800 text-sm font-medium">
+                            <button className="text-sm font-medium" style={{ color: 'var(--color-success)' }}>
                               Pay
                             </button>
                           </div>
@@ -449,17 +450,17 @@ function Billing() {
 
         {/* Claims Tab */}
         {activeTab === 'claims' && (
-          <div className="bg-white shadow-sm rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Insurance Claims</h3>
+          <Card padding>
+            <h3 className="text-lg font-semibold mb-6" style={{ color: 'var(--color-foreground)' }}>Insurance Claims</h3>
             <div className="space-y-4">
               {mockInsuranceClaims.map((claim) => {
                 const patient = getPatientById(claim.patientId);
                 return (
-                  <div key={claim.id} className="border border-gray-200 rounded-lg p-4">
+                  <div key={claim.id} className="rounded-lg p-4" style={{ border: '1px solid var(--color-border)' }}>
                     <div className="flex items-center justify-between">
                       <div>
-                        <h4 className="font-medium text-gray-900">{claim.claimNumber}</h4>
-                        <p className="text-sm text-gray-500">
+                        <h4 className="font-medium" style={{ color: 'var(--color-foreground)' }}>{claim.claimNumber}</h4>
+                        <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>
                           {patient?.firstName} {patient?.lastName} • {claim.insuranceProvider}
                         </p>
                       </div>
@@ -467,87 +468,56 @@ function Billing() {
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(claim.status)}`}>
                           {claim.status.charAt(0).toUpperCase() + claim.status.slice(1)}
                         </span>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm mt-1" style={{ color: 'var(--color-muted-foreground)' }}>
                           Submitted: {formatDate(claim.dateSubmitted)}
                         </p>
                       </div>
                     </div>
                     <div className="mt-4 grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-gray-600">Claimed Amount</p>
-                        <p className="font-semibold">{formatCurrency(claim.claimedAmount)}</p>
+                        <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>Claimed Amount</p>
+                        <p className="font-semibold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(claim.claimedAmount)}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Approved Amount</p>
-                        <p className="font-semibold">{formatCurrency(claim.approvedAmount)}</p>
+                        <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>Approved Amount</p>
+                        <p className="font-semibold" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(claim.approvedAmount)}</p>
                       </div>
                     </div>
                     {claim.processingNotes && (
-                      <div className="mt-3 p-3 bg-yellow-50 rounded-lg">
-                        <p className="text-sm text-yellow-800">{claim.processingNotes}</p>
+                      <div className="mt-3 p-3 rounded-lg" style={{ background: 'var(--color-warning-weak)' }}>
+                        <p className="text-sm" style={{ color: 'var(--color-warning)' }}>{claim.processingNotes}</p>
                       </div>
                     )}
                   </div>
                 );
               })}
             </div>
-          </div>
+          </Card>
         )}
 
         {/* Reports Tab */}
         {activeTab === 'reports' && (
-          <div className="bg-white shadow-sm rounded-2xl p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-6">Financial Reports</h3>
+          <Card padding>
+            <h3 className="text-lg font-semibold mb-6" style={{ color: 'var(--color-foreground)' }}>Financial Reports</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center mb-3">
-                  <span className="text-2xl mr-3">📊</span>
-                  <h4 className="font-medium text-gray-900">Revenue Report</h4>
+              {[
+                { icon: '📊', title: 'Revenue Report', desc: 'Monthly and yearly revenue analysis' },
+                { icon: '📈', title: 'Collection Report', desc: 'Payment collection and aging analysis' },
+                { icon: '🏥', title: 'Insurance Report', desc: 'Claims processing and reimbursement rates' },
+                { icon: '👨‍⚕️', title: 'Provider Report', desc: 'Revenue by healthcare provider' },
+                { icon: '🔍', title: 'Service Analysis', desc: 'Most profitable services and procedures' },
+                { icon: '📋', title: 'Tax Report', desc: 'Tax documentation and compliance' },
+              ].map((item) => (
+                <div key={item.title} className="rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer" style={{ border: '1px solid var(--color-border)' }}>
+                  <div className="flex items-center mb-3">
+                    <span className="text-2xl mr-3">{item.icon}</span>
+                    <h4 className="font-medium" style={{ color: 'var(--color-foreground)' }}>{item.title}</h4>
+                  </div>
+                  <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>{item.desc}</p>
                 </div>
-                <p className="text-sm text-gray-600">Monthly and yearly revenue analysis</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center mb-3">
-                  <span className="text-2xl mr-3">📈</span>
-                  <h4 className="font-medium text-gray-900">Collection Report</h4>
-                </div>
-                <p className="text-sm text-gray-600">Payment collection and aging analysis</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center mb-3">
-                  <span className="text-2xl mr-3">🏥</span>
-                  <h4 className="font-medium text-gray-900">Insurance Report</h4>
-                </div>
-                <p className="text-sm text-gray-600">Claims processing and reimbursement rates</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center mb-3">
-                  <span className="text-2xl mr-3">👨‍⚕️</span>
-                  <h4 className="font-medium text-gray-900">Provider Report</h4>
-                </div>
-                <p className="text-sm text-gray-600">Revenue by healthcare provider</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center mb-3">
-                  <span className="text-2xl mr-3">🔍</span>
-                  <h4 className="font-medium text-gray-900">Service Analysis</h4>
-                </div>
-                <p className="text-sm text-gray-600">Most profitable services and procedures</p>
-              </div>
-              
-              <div className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
-                <div className="flex items-center mb-3">
-                  <span className="text-2xl mr-3">📋</span>
-                  <h4 className="font-medium text-gray-900">Tax Report</h4>
-                </div>
-                <p className="text-sm text-gray-600">Tax documentation and compliance</p>
-              </div>
+              ))}
             </div>
-          </div>
+          </Card>
         )}
       </div>
 
