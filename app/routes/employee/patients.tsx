@@ -1,59 +1,81 @@
 import React, { useMemo, useState } from 'react';
-import { Header } from '~/components';
+import { Header, Input, Card } from '~/components';
 import { useOutletContext } from 'react-router-dom';
-import { mockPatientRecords } from '~/data/mockPatientAdmin';
+import { mockPatientRecords, type PatientRecord } from '~/data/mockPatientAdmin';
+import { PatientTable } from '~/components/patients/PatientTable';
+import { PatientQuickView } from '~/components/patients/PatientQuickView';
+import { PatientQueue, type QueueItem } from '~/components/patients/PatientQueue';
 
 interface OutletContext { isSidebarMinimized: boolean }
 
 const EmployeePatients: React.FC = () => {
   const { isSidebarMinimized } = useOutletContext<OutletContext>();
   const [query, setQuery] = useState('');
+  const [quickView, setQuickView] = useState<PatientRecord | null>(null);
+  const [queue, setQueue] = useState<QueueItem[]>([]);
 
-  const patients = useMemo(() => {
-    const list = mockPatientRecords;
-    if (!query) return list.slice(0, 25);
-    return list.filter(p => p.id.toLowerCase().includes(query.toLowerCase())).slice(0, 25);
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const base = mockPatientRecords;
+    if (!q) return base.slice(0, 50);
+    return base
+      .filter(p =>
+        p.id.toLowerCase().includes(q) ||
+        p.recordType.toLowerCase().includes(q) ||
+        p.status.toLowerCase().includes(q)
+      )
+      .slice(0, 50);
   }, [query]);
+
+  const handleQueue = (p: PatientRecord) => {
+    setQueue((prev) => {
+      if (prev.some(x => x.patient.id === p.id)) return prev; // avoid duplicates
+      return [...prev, { id: `${p.id}-${Date.now()}`, patient: p, joinedAt: Date.now() }];
+    });
+  };
+
+  const serveNext = () => setQueue((prev) => prev.slice(1));
+  const clearQueue = () => setQueue([]);
 
   return (
     <div>
-      <main className="dashboard wrapper">
-        <Header title="Patients" />
-      </main>
+      <Header title="Patients" />
 
-      <div className={`bg-white shadow-sm rounded-2xl mb-0 transition-all duration-500 ease-in-out ${
-        isSidebarMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0  md:ml-[-70px]'}`}>
-
-        <div className="p-6">
-          <div className="mb-4 flex items-center gap-3">
-            <input
-              type="text"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              placeholder="Search by Patient ID"
-              className="w-full max-w-md border rounded-lg px-3 py-2 focus:ring-pink-500 focus:outline-none"
-            />
+      <div className={`transition-all duration-500 ease-in-out`}>
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Left: Search + Table */}
+          <div className="lg:col-span-3">
+            <Card>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <Input
+                  placeholder="Search by ID, status, type"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="w-full sm:max-w-md"
+                />
+                <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>
+                  Showing {filtered.length} result(s)
+                </p>
+              </div>
+            </Card>
+            <div className="mt-4">
+              <PatientTable
+                data={filtered}
+                onQuickView={setQuickView}
+                onQueue={handleQueue}
+              />
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {patients.map(p => (
-              <div key={p.id} className="p-4 bg-gray-50 rounded-xl shadow-sm">
-                <div className="flex justify-between items-center">
-                  <h3 className="font-semibold text-gray-800">{p.id}</h3>
-                  <span className={`text-xs px-2 py-1 rounded capitalize ${
-                    p.status === 'active' ? 'bg-green-100 text-green-700' : p.status === 'inactive' ? 'bg-gray-200 text-gray-700' : 'bg-yellow-100 text-yellow-700'
-                  }`}>{p.status}</span>
-                </div>
-                <div className="mt-2 text-sm text-gray-600 space-y-1">
-                  <p>Profile: {p.profileCompleteness}%</p>
-                  <p>Record Type: {p.recordType}</p>
-                  <p>Created: {new Date(p.recordCreatedDate).toLocaleString()}</p>
-                </div>
-              </div>
-            ))}
+          {/* Right: Queue */}
+          <div className="lg:col-span-1">
+            <PatientQueue items={queue} onClear={clearQueue} onPop={serveNext} />
           </div>
         </div>
       </div>
+
+      {/* Quick View Modal */}
+      <PatientQuickView patient={quickView} onClose={() => setQuickView(null)} />
     </div>
   );
 };

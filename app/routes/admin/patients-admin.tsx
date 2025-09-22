@@ -22,11 +22,11 @@ import {
 import { mockEmployees } from '~/data/mockEmployees';
 
 interface OutletContext {
-  isMinimized: boolean;
+  isSidebarMinimized: boolean;
 }
 
 function PatientsAdmin() {
-  const { isMinimized } = useOutletContext<OutletContext>();
+  const { isSidebarMinimized: isMinimized } = useOutletContext<OutletContext>();
   const [activeTab, setActiveTab] = useState('overview');
   const [dateRange, setDateRange] = useState('last30days');
   const [selectedSeverity, setSelectedSeverity] = useState('all');

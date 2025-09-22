@@ -1,0 +1,40 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Run linter
+      - name: Run lint
+        run: npm run lint --if-present
+
+      # 5. Run tests (Jest + Playwright later)
+      - name: Run tests
+        run: npm test --if-present
+
+      # 6. Build the app
+      - name: Build app
+        run: npm run build
+        env:
+          CI: true

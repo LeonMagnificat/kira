@@ -27,4 +27,44 @@ export default [
             route("monitoring", "routes/employee/monitoring.tsx"),
         ]
     ),
+
+    // Doctor portal under /doctor/*
+    route(
+        "doctor",
+        "routes/doctor/doctor-layout.tsx",
+        [
+            index("routes/doctor/index.tsx"),
+            route("patients", "routes/doctor/patients.tsx"),
+            route("prescriptions", "routes/doctor/prescriptions.tsx"),
+            route("visits", "routes/doctor/visits.tsx"),
+            route("appointments", "routes/doctor/appointments.tsx"),
+        ]
+    ),
+
+    // Nurse portal under /nurse/*
+    route(
+        "nurse",
+        "routes/nurse/nurse-layout.tsx",
+        [
+            index("routes/nurse/index.tsx"),
+            route("patients", "routes/nurse/patients.tsx"),
+            route("vitals", "routes/nurse/vitals.tsx"),
+            route("medication", "routes/nurse/medication.tsx"),
+            route("schedule", "routes/nurse/schedule.tsx"),
+        ]
+    ),
+
+    // Patient portal under /patient/*
+    route(
+        "patient",
+        "routes/patient/patient-layout.tsx",
+        [
+            index("routes/patient/index.tsx"),
+            route("history", "routes/patient/history.tsx"),
+            route("prescriptions", "routes/patient/prescriptions.tsx"),
+            route("appointments", "routes/patient/appointments.tsx"),
+            route("messages", "routes/patient/messages.tsx"),
+            route("documents", "routes/patient/documents.tsx"),
+        ]
+    ),
 ] satisfies RouteConfig;
