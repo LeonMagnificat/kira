@@ -6,6 +6,8 @@ export type PatientTableProps = {
   data: PatientRecord[];
   onQuickView: (patient: PatientRecord) => void;
   onQueue: (patient: PatientRecord) => void;
+  onEdit?: (patient: PatientRecord) => void;
+  onDelete?: (patient: PatientRecord) => void;
   showName?: boolean;
   getNameById?: (id: string) => string | undefined;
   showContact?: boolean;
@@ -45,7 +47,7 @@ function ProgressBar({ value }: { value: number }) {
   );
 }
 
-export const PatientTable: React.FC<PatientTableProps> = ({ data, onQuickView, onQueue, showName, getNameById, showContact }) => {
+export const PatientTable: React.FC<PatientTableProps> = ({ data, onQuickView, onQueue, onEdit, onDelete, showName, getNameById, showContact }) => {
   return (
     <div className="w-full overflow-x-auto" style={{ border: '1px solid var(--color-border)', borderRadius: 'var(--radius-xl)', background: 'var(--color-surface)' }}>
       <table className="min-w-full" style={{ color: 'var(--color-foreground)' }}>
@@ -90,7 +92,9 @@ export const PatientTable: React.FC<PatientTableProps> = ({ data, onQuickView, o
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 justify-end">
                     <Button variant="secondary" size="sm" onClick={() => onQuickView(p)}>Quick view</Button>
-                    <Button variant="primary" size="sm" onClick={() => onQueue(p)}>Add to queue</Button>
+                    <Button variant="primary" size="sm" onClick={() => onQueue(p)}>Queue</Button>
+                    {onEdit ? <Button variant="ghost" size="sm" onClick={() => onEdit(p)}>Edit</Button> : null}
+                    {onDelete ? <Button variant="ghost" size="sm" onClick={() => onDelete(p)}>Delete</Button> : null}
                   </div>
                 </td>
               </tr>

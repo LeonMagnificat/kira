@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { Header, Input, Card } from '~/components';
+import { Header, Input, Card, Modal, ConfirmDialog } from '~/components';
 import { useOutletContext } from 'react-router-dom';
 import { mockPatientRecords, type PatientRecord } from '~/data/mockPatientAdmin';
 import { PatientTable } from '~/components/patients/PatientTable';
 import { PatientQuickView } from '~/components/patients/PatientQuickView';
 import { PatientQueue, type QueueItem } from '~/components/patients/PatientQueue';
+import { PatientForm, type PatientFormValues } from '~/components/patients/PatientForm';
 
 interface OutletContext { isSidebarMinimized: boolean }
 
@@ -13,6 +14,9 @@ const EmployeePatients: React.FC = () => {
   const [query, setQuery] = useState('');
   const [quickView, setQuickView] = useState<PatientRecord | null>(null);
   const [queue, setQueue] = useState<QueueItem[]>([]);
+  const [showCreate, setShowCreate] = useState(false);
+  const [editTarget, setEditTarget] = useState<PatientRecord | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<PatientRecord | null>(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
