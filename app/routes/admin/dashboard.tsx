@@ -71,8 +71,7 @@ function Dashboard() {
       />
       </main>
 
-      <div className={`bg-surface shadow-sm rounded-2xl mb-0 transition-all duration-500 ease-in-out ${
-      isSidebarMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0  md:ml-[-70px]'}`}>
+      <div className="bg-surface shadow-sm rounded-2xl mb-0">
 <div className="bg-surface shadow-sm rounded-2xl p-6 my-4 ">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>

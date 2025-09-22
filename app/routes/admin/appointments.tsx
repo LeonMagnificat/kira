@@ -111,9 +111,7 @@ function Appointments() {
 
         </main>
 
-    <div className={`mt-4 lg:flex-row gap-6 transition-all duration-500 ease-in-out ${
-        isSidebarMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0 md:ml-[-70px]'
-      }`}>
+    <div className="mt-4 lg:flex-row gap-6">
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
           <div className="bg-white rounded-2xl p-6 shadow-sm">

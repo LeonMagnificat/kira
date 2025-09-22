@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Header } from '~/components'
+import { Header, EmployeeDialog, Dialog } from '~/components'
 import { useOutletContext } from 'react-router-dom'
 import { sidebarItems } from '~/constants'
 import type { Employee } from '~/data/mockEmployees'
@@ -7,6 +7,7 @@ import { mockEmployees } from '~/data/mockEmployees'
 import { employeeCategories } from '~/constants/employeeCategories'
 import { getStatusColor } from '~/utils/employeeUtils'
 import { EmployeeAvatar } from '~/components/EmployeeAvatar'
+import { listItems, createItem, updateItem, deleteItem } from '~/utils/localCrud'
 
 interface OutletContext {
   isSidebarMinimized: boolean;
@@ -23,13 +24,21 @@ function Employees() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeCategory, setActiveCategory] = useState<'all' | 'doctors' | 'nurses' | 'janitors' | 'investors' | 'members'>('all');
   
+  const STORE_KEY = 'admin.employees';
   const itemsPerPage = 5;
   const context = useOutletContext<OutletContext>();
   const isSidebarMinimized = context?.isSidebarMinimized || false;
 
+  // Dialog state for create/edit and delete confirmation
+  const [showDialog, setShowDialog] = useState(false)
+  const [dialogMode, setDialogMode] = useState<'create' | 'edit'>('create')
+  const [dialogInitial, setDialogInitial] = useState<Partial<Employee> | undefined>(undefined)
+  const [deleteTarget, setDeleteTarget] = useState<Employee | null>(null)
+
   useEffect(() => {
-    setEmployees(mockEmployees);
-    setDisplayedEmployees(mockEmployees.slice(0, itemsPerPage));
+    const initial = listItems<Employee>(STORE_KEY, mockEmployees)
+    setEmployees(initial)
+    setDisplayedEmployees(initial.slice(0, itemsPerPage))
   }, []);
 
   useEffect(() => {
@@ -61,9 +70,47 @@ function Employees() {
   };
 
   const selectEmployee = (employee: Employee) => {
-    setSelectedEmployee(employee);
-    setEditedEmployee({ ...employee });
-  };
+    setSelectedEmployee(employee)
+    setEditedEmployee({ ...employee })
+  }
+
+  // Open create dialog
+  const openCreate = () => {
+    setDialogMode('create')
+    setDialogInitial(undefined)
+    setShowDialog(true)
+  }
+
+  // Open edit dialog
+  const openEdit = (employee: Employee) => {
+    setDialogMode('edit')
+    setDialogInitial(employee)
+    setShowDialog(true)
+  }
+
+  // Persist create/edit
+  const handleDialogSubmit = (data: Omit<Employee, 'id'> & Partial<Pick<Employee, 'id'>>) => {
+    if (dialogMode === 'create') {
+      const created = createItem<Employee>(STORE_KEY, data as any)
+      setEmployees(prev => [created, ...prev])
+    } else if (dialogMode === 'edit' && data.id) {
+      const updated = updateItem<Employee>(STORE_KEY, data.id, data as any)
+      if (updated) setEmployees(prev => prev.map(e => e.id === updated.id ? (updated as Employee) : e))
+    }
+    setShowDialog(false)
+  }
+
+  // Delete flow
+  const confirmDelete = (employee: Employee) => setDeleteTarget(employee)
+  const performDelete = () => {
+    if (!deleteTarget) return
+    const ok = deleteItem<Employee>(STORE_KEY, deleteTarget.id)
+    if (ok) {
+      setEmployees(prev => prev.filter(e => e.id !== deleteTarget.id))
+      if (selectedEmployee?.id === deleteTarget.id) closePanel()
+    }
+    setDeleteTarget(null)
+  }
 
   const closePanel = () => {
     setSelectedEmployee(null);
@@ -112,19 +159,47 @@ function Employees() {
         {/* Category Tabs */}
         <div className="bg-white  rounded-2xl p-6 my-4">
           <div className="flex flex-col gap-6">
-            {/* Search Bar */}
-            <div className="max-w-md">
-              <div className="relative">
-                <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search employees..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                />
+            {/* Top bar: Search + Actions */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div className="max-w-md w-full">
+                <div className="relative">
+                  <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search employees..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={openCreate}
+                  className="bg-pink-700 text-white px-4 py-2 rounded-lg hover:bg-pink-800 transition-colors text-sm font-medium"
+                >
+                  Add Employee
+                </button>
+                {selectedEmployee && (
+                  <>
+                    <button
+                      onClick={() => openEdit(selectedEmployee)}
+                      className="border px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50"
+                      style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground)' }}
+                    >
+                      Edit Selected
+                    </button>
+                    <button
+                      onClick={() => confirmDelete(selectedEmployee)}
+                      className="px-4 py-2 rounded-lg text-sm font-medium"
+                      style={{ background: 'var(--color-danger)', color: 'var(--color-primary-foreground)' }}
+                    >
+                      Delete Selected
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 
@@ -211,6 +286,30 @@ function Employees() {
                   </tr>
                 ))}
               </tbody>
+
+              {/* Dialogs */}
+              <EmployeeDialog
+                open={showDialog}
+                mode={dialogMode}
+                initial={dialogInitial}
+                onClose={() => setShowDialog(false)}
+                onSubmit={handleDialogSubmit}
+              />
+
+              <Dialog
+                open={!!deleteTarget}
+                onClose={() => setDeleteTarget(null)}
+                title="Delete Employee"
+                description={`Are you sure you want to delete ${deleteTarget?.firstName} ${deleteTarget?.lastName}? This action cannot be undone.`}
+                tone="danger"
+                submitLabel="Delete"
+                cancelLabel="Cancel"
+                onSubmit={performDelete}
+              >
+                <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>
+                  The employee will be removed from local storage immediately.
+                </p>
+              </Dialog>
             </table>
           </div>
 

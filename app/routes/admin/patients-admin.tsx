@@ -104,7 +104,7 @@ function PatientsAdmin() {
         </main>
 
     <div className={`flex flex-col mt-4 transition-all duration-500 ease-in-out ${
-        isMinimized ? 'sm:ml-[0px] md:ml-[-70px]' : 'sm:ml-0 md:ml-[-25px]'
+        isMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0 md:ml-[-70px]'
       }`}>
 
        

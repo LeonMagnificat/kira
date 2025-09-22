@@ -9,13 +9,13 @@ type JourneyStage = 'arrived' | 'registered' | 'waiting_doctor' | 'with_doctor' 
 
 type JourneyAction = 'register' | 'queue' | 'start_consultation' | 'send_to_lab' | 'complete';
 
-const stageMeta: Record<JourneyStage, { label: string; color: string }> = {
-  arrived: { label: 'Arrived', color: 'bg-gray-100 text-gray-800' },
-  registered: { label: 'Registered', color: 'bg-blue-100 text-blue-800' },
-  waiting_doctor: { label: 'Waiting Doctor', color: 'bg-yellow-100 text-yellow-800' },
-  with_doctor: { label: 'With Doctor', color: 'bg-green-100 text-green-800' },
-  in_lab: { label: 'In Lab', color: 'bg-purple-100 text-purple-800' },
-  completed: { label: 'Completed', color: 'bg-green-200 text-green-900' },
+const stageMeta: Record<JourneyStage, { label: string; bg: string; fg: string }> = {
+  arrived: { label: 'Arrived', bg: 'var(--color-muted)', fg: 'var(--color-foreground)' },
+  registered: { label: 'Registered', bg: 'var(--color-accent-weak)', fg: 'var(--color-accent)' },
+  waiting_doctor: { label: 'Waiting Doctor', bg: 'var(--color-warning-weak)', fg: 'var(--color-warning)' },
+  with_doctor: { label: 'With Doctor', bg: 'var(--color-success-weak)', fg: 'var(--color-success)' },
+  in_lab: { label: 'In Lab', bg: 'var(--color-primary-weak)', fg: 'var(--color-primary)' },
+  completed: { label: 'Completed', bg: 'var(--color-success-weak)', fg: 'var(--color-success)' },
 };
 
 const nextStageByAction: Record<JourneyAction, JourneyStage> = {
@@ -32,6 +32,22 @@ const EmployeeMonitoring: React.FC = () => {
 
   // Keep an editable journey map in state (starts as arrived by default)
   const [journeyMap, setJourneyMap] = useState<Record<string, JourneyStage>>({});
+
+  const token = {
+    surface: 'var(--color-surface)',
+    foreground: 'var(--color-foreground)',
+    muted: 'var(--color-muted)',
+    mutedFg: 'var(--color-muted-foreground)',
+    primary: 'var(--color-primary)',
+    primaryWeak: 'var(--color-primary-weak)',
+    accent: 'var(--color-accent)',
+    success: 'var(--color-success)',
+    successWeak: 'var(--color-success-weak)',
+    warning: 'var(--color-warning)',
+    warningWeak: 'var(--color-warning-weak)',
+    danger: 'var(--color-danger)',
+    dangerWeak: 'var(--color-danger-weak)'
+  } as const;
 
   const records = useMemo(() => mockPatientRecords.slice(0, 25), []);
 
@@ -61,7 +77,11 @@ const EmployeeMonitoring: React.FC = () => {
               <button
                 key={s}
                 onClick={() => setFilter(s as any)}
-                className={`px-3 py-1 rounded-lg text-sm border ${filter === s ? 'bg-pink-700 text-white border-pink-700' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'}`}
+                className="px-3 py-1 rounded-lg text-sm border transition-colors"
+                style={filter === s
+                  ? { background: 'var(--color-primary)', color: 'var(--color-primary-foreground)', borderColor: 'var(--color-primary)' }
+                  : { background: 'var(--color-muted)', color: 'var(--color-muted-foreground)', borderColor: 'var(--color-border)' }
+                }
               >
                 {s === 'all' ? 'All' : stageMeta[s as JourneyStage].label}
               </button>
@@ -70,10 +90,13 @@ const EmployeeMonitoring: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {items.map(p => (
-              <div key={p.id} className="p-4 bg-gray-50 rounded-xl shadow-sm">
+              <div key={p.id} className="p-4 rounded-xl shadow-sm" style={{ background: 'var(--color-surface)' }} >
                 <div className="flex justify-between items-center mb-2">
                   <h3 className="font-semibold text-gray-800">{p.id}</h3>
-                  <span className={`text-xs px-2 py-1 rounded ${stageMeta[(p as any).stage].color}`}>
+                  <span
+                    className="text-xs px-2 py-1 rounded"
+                    style={{ background: stageMeta[(p as any).stage].bg, color: stageMeta[(p as any).stage].fg }}
+                  >
                     {stageMeta[(p as any).stage].label}
                   </span>
                 </div>
@@ -86,31 +109,36 @@ const EmployeeMonitoring: React.FC = () => {
                 {/* Actions */}
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button
-                    className="px-3 py-1 text-xs rounded bg-blue-600 text-white"
+                    className="px-3 py-1 text-xs rounded"
+                    style={{ background: 'var(--color-accent)', color: 'var(--color-primary-foreground)' }}
                     onClick={() => updateStage(p.id, 'register')}
                   >
                     Register
                   </button>
                   <button
-                    className="px-3 py-1 text-xs rounded bg-yellow-600 text-white"
+                    className="px-3 py-1 text-xs rounded"
+                    style={{ background: 'var(--color-warning)', color: 'var(--color-primary-foreground)' }}
                     onClick={() => updateStage(p.id, 'queue')}
                   >
                     Send to Queue
                   </button>
                   <button
-                    className="px-3 py-1 text-xs rounded bg-green-600 text-white"
+                    className="px-3 py-1 text-xs rounded"
+                    style={{ background: 'var(--color-success)', color: 'var(--color-primary-foreground)' }}
                     onClick={() => updateStage(p.id, 'start_consultation')}
                   >
                     Start Consultation
                   </button>
                   <button
-                    className="px-3 py-1 text-xs rounded bg-purple-600 text-white"
+                    className="px-3 py-1 text-xs rounded"
+                    style={{ background: 'var(--color-accent)', color: 'var(--color-primary-foreground)' }}
                     onClick={() => updateStage(p.id, 'send_to_lab')}
                   >
                     Send to Lab
                   </button>
                   <button
-                    className="px-3 py-1 text-xs rounded bg-gray-700 text-white"
+                    className="px-3 py-1 text-xs rounded"
+                    style={{ background: 'var(--color-foreground)', color: 'var(--color-surface)' }}
                     onClick={() => updateStage(p.id, 'complete')}
                   >
                     Complete

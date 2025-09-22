@@ -103,15 +103,16 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
   const totals = calculateTotals();
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ background: 'rgba(0,0,0,0.5)' }}>
+      <div className="rounded-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden" style={{ background: 'var(--color-surface)', color: 'var(--color-foreground)' }}>
         {/* Header */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6" style={{ borderBottom: '1px solid var(--color-border)' }}>
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">Create New Invoice</h2>
+            <h2 className="text-2xl font-bold" style={{ color: 'var(--color-foreground)' }}>Create New Invoice</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
+              className="transition-colors"
+              style={{ color: 'var(--color-muted-foreground)' }}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -137,7 +138,7 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
               </div>
               
               {!selectedPatient && searchTerm && (
-                <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-lg">
+                <div className="max-h-40 overflow-y-auto rounded-lg" style={{ border: '1px solid var(--color-border)' }}>
                   {filteredPatients.map((patient) => (
                     <button
                       key={patient.id}
@@ -145,12 +146,13 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
                         setSelectedPatient(patient);
                         setSearchTerm('');
                       }}
-                      className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                      className="w-full text-left p-3 transition-colors"
+                      style={{ borderBottom: '1px solid var(--color-border)', background: 'transparent' }}
                     >
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium" style={{ color: 'var(--color-foreground)' }}>
                         {patient.firstName} {patient.lastName}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>
                         {patient.email} • {patient.insuranceInfo.provider}
                       </div>
                     </button>
@@ -159,13 +161,13 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
               )}
 
               {selectedPatient && (
-                <div className="p-4 bg-blue-50 rounded-lg">
+                <div className="p-4 rounded-lg" style={{ background: 'var(--color-accent-weak)' }}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="font-medium text-gray-900">
+                      <h4 className="font-medium" style={{ color: 'var(--color-foreground)' }}>
                         {selectedPatient.firstName} {selectedPatient.lastName}
                       </h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>
                         {selectedPatient.insuranceInfo.provider} • 
                         Copay: {formatCurrency(selectedPatient.insuranceInfo.copay)} • 
                         Deductible: {formatCurrency(selectedPatient.insuranceInfo.deductible - selectedPatient.insuranceInfo.deductibleMet)} remaining
@@ -173,7 +175,8 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
                     </div>
                     <button
                       onClick={() => setSelectedPatient(null)}
-                      className="text-gray-400 hover:text-gray-600"
+                      className="transition-colors"
+                      style={{ color: 'var(--color-muted-foreground)' }}
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -205,7 +208,8 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
                     placeholder="Search services by code or description..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    className="w-full px-4 py-2 rounded-lg focus:ring-2"
+                    style={{ border: '1px solid var(--color-border)' }}
                   />
                 </div>
                 <div>
@@ -215,13 +219,14 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
                     value={quantity}
                     onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
                     min="1"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    className="w-full px-4 py-2 rounded-lg focus:ring-2"
+                    style={{ border: '1px solid var(--color-border)' }}
                   />
                 </div>
               </div>
 
               {searchTerm && !selectedService && (
-                <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-lg mb-4">
+                <div className="max-h-40 overflow-y-auto rounded-lg mb-4" style={{ border: '1px solid var(--color-border)' }}>
                   {filteredServices.map((service) => (
                     <button
                       key={service.code}
@@ -229,17 +234,18 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
                         setSelectedService(service);
                         setSearchTerm('');
                       }}
-                      className="w-full text-left p-3 hover:bg-gray-50 border-b border-gray-100 last:border-b-0"
+                      className="w-full text-left p-3 transition-colors last:border-b-0"
+                      style={{ borderBottom: '1px solid var(--color-border)', background: 'transparent' }}
                     >
                       <div className="flex justify-between items-start">
                         <div>
-                          <div className="font-medium text-gray-900">{service.code}</div>
-                          <div className="text-sm text-gray-600">{service.description}</div>
-                          <div className="text-xs text-gray-500 capitalize">{service.category}</div>
+                          <div className="font-medium" style={{ color: 'var(--color-foreground)' }}>{service.code}</div>
+                          <div className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>{service.description}</div>
+                          <div className="text-xs capitalize" style={{ color: 'var(--color-muted-foreground)' }}>{service.category}</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-medium text-gray-900">{formatCurrency(service.basePrice)}</div>
-                          <div className="text-xs text-gray-500">{service.insuranceCoverage}% covered</div>
+                          <div className="font-medium" style={{ color: 'var(--color-foreground)' }}>{formatCurrency(service.basePrice)}</div>
+                          <div className="text-xs" style={{ color: 'var(--color-muted-foreground)' }}>{service.insuranceCoverage}% covered</div>
                         </div>
                       </div>
                     </button>
@@ -248,12 +254,12 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
               )}
 
               {selectedService && (
-                <div className="p-4 bg-green-50 rounded-lg mb-4">
+                <div className="p-4 rounded-lg mb-4" style={{ background: 'var(--color-success-weak)' }}>
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="font-medium text-gray-900">{selectedService.code}</h4>
-                      <p className="text-sm text-gray-600">{selectedService.description}</p>
-                      <p className="text-sm text-gray-500">
+                      <h4 className="font-medium" style={{ color: 'var(--color-foreground)' }}>{selectedService.code}</h4>
+                      <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>{selectedService.description}</p>
+                      <p className="text-sm" style={{ color: 'var(--color-muted-foreground)' }}>
                         {formatCurrency(selectedService.basePrice)} × {quantity} = {formatCurrency(selectedService.basePrice * quantity)}
                       </p>
                     </div>
@@ -261,7 +267,8 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
                       <button
                         onClick={addServiceItem}
                         disabled={!selectedPatient}
-                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                        className="px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+                        style={{ background: 'var(--color-success)', color: 'var(--color-primary-foreground)' }}
                       >
                         Add
                       </button>
@@ -270,7 +277,8 @@ export function CreateInvoiceModal({ onClose, onCreateInvoice }: CreateInvoiceMo
                           setSelectedService(null);
                           setSearchTerm('');
                         }}
-                        className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+                        className="px-4 py-2 rounded-lg transition-colors"
+                        style={{ background: 'var(--color-muted)', color: 'var(--color-foreground)' }}
                       >
                         Cancel
                       </button>

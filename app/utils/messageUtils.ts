@@ -69,13 +69,13 @@ export const formatMessageTime = (timestamp: string): string => {
 export const getGroupStatusColor = (type: MessageGroup['type']): string => {
   switch (type) {
     case 'emergency':
-      return 'text-red-600';
+      return 'text-danger';
     case 'case-discussion':
-      return 'text-blue-600';
+      return 'text-accent';
     case 'department':
-      return 'text-green-600';
+      return 'text-success';
     default:
-      return 'text-gray-600';
+      return 'text-muted-foreground';
   }
 };
 
