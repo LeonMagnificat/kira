@@ -107,7 +107,7 @@ function Appointments() {
   return (
     <>
       <main className="appointments wrapper">
-        <Header ="mb-4" title={sidebarItems[3].label} />
+        <Header title={sidebarItems[3].label} />
 
         </main>
 
