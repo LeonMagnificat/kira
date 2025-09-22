@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate, useOutletContext } from 'react-router-dom'
+import { useOutletContext } from 'react-router-dom'
 import ThemeToggle from './ThemeToggle'
 
 interface OutletContext {
@@ -11,7 +11,6 @@ function Header( { title, description }: { title?: string; description?: string 
   const isSidebarMinimized = context?.isSidebarMinimized || false;
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const navigate = useNavigate();
 
   const toggleNotifications = () => {
     setIsNotificationOpen(!isNotificationOpen);
@@ -22,11 +21,6 @@ function Header( { title, description }: { title?: string; description?: string 
     setIsProfileOpen(!isProfileOpen);
     setIsNotificationOpen(false);
   };
-
-  const goToSettings = () => {
-    setIsProfileOpen(false);
-    navigate('/settings');
-  }
 
   return (
     <header
@@ -153,46 +147,6 @@ function Header( { title, description }: { title?: string; description?: string 
           <ThemeToggle />
 
           {/* Profile Dropdown */}
-          <div className="relative">
-            <button
-              onClick={toggleProfile}
-              className="flex items-center gap-2 px-2 py-1 rounded-lg hover:opacity-90"
-              style={{ background: 'transparent', color: 'var(--color-foreground)' }}
-              aria-haspopup="menu"
-              aria-expanded={isProfileOpen}
-            >
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(90deg, #ec4899, #db2777)' }}>
-                <span className="text-xs font-bold text-white">JD</span>
-              </div>
-              <svg className={`w-4 h-4 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-
-            <div
-              className={`absolute right-0 top-full mt-2 w-56 shadow-xl rounded-2xl border transition-all duration-200 z-50 ${
-                isProfileOpen ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-2 pointer-events-none'
-              }`}
-              style={{ background: 'var(--color-surface)', borderColor: 'var(--color-border)' }}
-              role="menu"
-            >
-              <div className="p-3 border-b" style={{ borderColor: 'var(--color-border)' }}>
-                <p className="text-sm font-semibold" style={{ color: 'var(--color-foreground)' }}>John Doe</p>
-                <p className="text-xs" style={{ color: 'var(--color-muted-foreground)' }}>Administrator</p>
-              </div>
-              <div className="py-1">
-                <button onClick={goToSettings} className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50" style={{ color: 'var(--color-foreground)' }} role="menuitem">
-                  My Profile
-                </button>
-                <Link to="/settings" className="block px-4 py-2 text-sm hover:bg-gray-50" style={{ color: 'var(--color-foreground)' }} role="menuitem">
-                  Account Settings
-                </Link>
-                <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50" style={{ color: 'var(--color-foreground)' }} role="menuitem">
-                  Logout
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </header>

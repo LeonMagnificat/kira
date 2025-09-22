@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Header } from '~/components';
 import { useOutletContext } from 'react-router-dom';
+import { sidebarItems } from '../../constants';
 import {
   mockNotifications,
   getNotificationsByType,
@@ -14,7 +15,7 @@ import {
 } from '~/data/mockNotifications';
 
 interface OutletContext {
-  isMinimized: boolean;
+  isSidebarMinimized: boolean;
 }
 
 const getNotificationIcon = (type: Notification['type']) => {
@@ -67,7 +68,7 @@ const formatTimeAgo = (dateString: string): string => {
 };
 
 function Notifications() {
-  const { isMinimized } = useOutletContext<OutletContext>();
+  const { isSidebarMinimized } = useOutletContext<OutletContext>();
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
   const [showOnlyUnread, setShowOnlyUnread] = useState(false);
@@ -145,8 +146,13 @@ function Notifications() {
   return (
     <>
       <main className="notifications wrapper">
-        <div className={isMinimized ? 'ml-[-25px]' : 'ml-[-70px]'}>
-          <Header title="Notifications" />
+          <Header title={sidebarItems[7].label} /> 
+
+          </main>
+
+            <div className={`flex flex-col  h-[calc(100vh-200px)] mt-4 gap-6 transition-all duration-500 ease-in-out ${
+        isSidebarMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0 md:ml-[-70px]'
+      }`}>
           
           {/* Statistics Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -365,7 +371,7 @@ function Notifications() {
             </div>
           )}
         </div>
-      </main>
+      
     </>
   );
 }

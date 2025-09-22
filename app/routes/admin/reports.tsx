@@ -24,8 +24,9 @@ import {
 import { formatCurrency, formatDate, getStatusColor } from '~/utils/billingUtils';
 
 interface OutletContext {
-  isMinimized: boolean;
+  isSidebarMinimized: boolean;
 }
+
 
 // Enhanced analytics functions
 const getAgeGroup = (dateOfBirth: string): string => {
@@ -58,7 +59,7 @@ const getTimeOfDay = (date: string): string => {
 };
 
 function Reports() {
-  const { isMinimized } = useOutletContext<OutletContext>();
+  const { isSidebarMinimized } = useOutletContext<OutletContext>();
   const [activeTab, setActiveTab] = useState('financial');
   const [dateRange, setDateRange] = useState('last30days');
   const [selectedProvider, setSelectedProvider] = useState('all');
@@ -418,8 +419,8 @@ function Reports() {
         
         {/* Controls */}
 
-        <div className={`mt-4 lg:flex-row gap-6 transition-all duration-500 ease-in-out ${
-        isMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0 md:ml-[-70px]'
+       <div className={`flex flex-col  h-[calc(100vh-200px)] mt-4 gap-6 transition-all duration-500 ease-in-out ${
+        isSidebarMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0 md:ml-[-70px]'
       }`}>
         
             

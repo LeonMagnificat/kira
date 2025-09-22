@@ -31,7 +31,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarItems, isMinimized = false, on
 
   return (
     <div
-      className={`h-[calc(60vh-2rem)] p-4 m-4 shadow-sm rounded-2xl flex flex-col transition-all duration-500 ease-in-out ${
+      className={`h-auto min-h-[calc(100vh-4rem)] max-h-screen p-4 m-4 shadow-sm rounded-2xl flex flex-col transition-all duration-500 ease-in-out ${
         currentIsMinimized ? 'w-20' : 'w-full max-w-[18rem] m-4'
       }`}
       style={{ background: 'var(--color-surface)' }}

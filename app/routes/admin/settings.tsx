@@ -40,7 +40,7 @@ interface SecuritySettings {
 }
 
 function Settings() {
-  const { isSidebarMinimized: isMinimized } = useOutletContext<OutletContext>();
+  const { isSidebarMinimized: isSidebarMinimized } = useOutletContext<OutletContext>();
   const [activeTab, setActiveTab] = useState('profile');
   const [isEditing, setIsEditing] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
@@ -111,8 +111,15 @@ function Settings() {
   return (
     <>
       <main className="settings wrapper">
-        <div className={isMinimized ? 'ml-[-25px]' : 'ml-[-70px]'}>
+
+
           <Header title="Settings" />
+
+          </main>
+
+           <div className={`flex flex-col  h-[calc(100vh-200px)] mt-4 gap-6 transition-all duration-500 ease-in-out ${
+        isSidebarMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0 md:ml-[-70px]'
+      }`}>
           
           {/* Tab Navigation */}
           <div className="bg-white shadow-sm rounded-2xl mb-6">
@@ -606,7 +613,7 @@ function Settings() {
             </div>
           )}
         </div>
-      </main>
+      
     </>
   );
 }

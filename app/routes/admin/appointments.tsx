@@ -107,9 +107,13 @@ function Appointments() {
   return (
     <>
       <main className="appointments wrapper">
-        <Header title={sidebarItems[3].label} />
+        <Header ="mb-4" title={sidebarItems[3].label} />
 
         </main>
+
+         <div className={`flex flex-col  h-[calc(100vh-200px)] mt-4 gap-6 transition-all duration-500 ease-in-out ${
+        isSidebarMinimized ? 'sm:ml-[0px] md:ml-[-25px]' : 'sm:ml-0 md:ml-[-70px]'
+      }`}>
 
     <div className="mt-4 lg:flex-row gap-6">
         {/* Statistics Cards */}
@@ -378,6 +382,7 @@ function Appointments() {
         )}
 
             
+        </div>
         </div>
       
     </>
